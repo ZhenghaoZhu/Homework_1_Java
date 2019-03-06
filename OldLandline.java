@@ -20,6 +20,8 @@ public class OldLandline implements Phone{
     public String callerName;
     public Phone callerPhone;
     public boolean lineOccupied;
+    public boolean receiveCalledFromClass;
+    public boolean receiveEndSignalCalledFromClass;
 
     public OldLandline(String ownerName, long phoneNumber){
       ownerPhoneNumber = new PhoneNumber(phoneNumber);
@@ -51,6 +53,7 @@ public class OldLandline implements Phone{
         System.out.println(this.getOwner() + " is unable to call " + phone.getOwner() + ". Line is currently busy.");
         return;
       }
+      receiveCalledFromClass = true;
       phone.receive(this);
       return;
     }
@@ -61,6 +64,7 @@ public class OldLandline implements Phone{
         return;
       }
       String returnedMessage  = getOwner() + " has ended the call to " + getCallerName() + "."; // Ending the call.
+      receiveEndSignalCalledFromClass = true;
       callerPhone.receiveEndSignal(this); // Other user also ending the call.
       callerPhoneNumber = null; // Reseting variables to null
       setCallerName("");
@@ -71,6 +75,10 @@ public class OldLandline implements Phone{
     }
 
     public void receive(Phone from){
+      if(!receiveCalledFromClass){
+        System.out.println("You should call instead.");
+        return;
+      }
       if(this.isBusy() && from.isBusy()){ // Both values are now changed
         System.out.println(from.getOwner() + " is on the phone with " + this.getOwner() + ".");
         return;
@@ -91,6 +99,10 @@ public class OldLandline implements Phone{
     }
 
     public void receiveEndSignal(Phone from){
+      if(!receiveEndSignalCalledFromClass){
+        System.out.println("You should end the call instead.");
+        return;
+      }
       this.callerPhoneNumber = null; // Reseting variables to null
       callerPhone = null;
       this.lineOccupied = false;

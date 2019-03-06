@@ -57,12 +57,17 @@ public class SmartPhone extends Landline implements Computer{
       return;
     }
     // P1 is not busy and P1 is turned ON.
+    receiveCalledFromClass = true;
     phone.receive(this); // Checking if P2 is available, this is P1 and phone is P2
     return;
   }
 
   @Override
   public void receive(Phone from){ // this is P2, from is P1
+    if(!receiveCalledFromClass){
+      System.out.println("You should call instead.");
+      return;
+    }
     if(this.isBusy() && from.isBusy()){ // Both values are now changed
       System.out.println(from.getOwner() + " is on the phone with " + this.getOwner() + ".");
       return;

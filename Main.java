@@ -2,7 +2,7 @@ class Main {
   public static void main(String[] args) {
     
     
-    SmartPhone sp1 = new SmartPhone("sp1", 1434567891L, 320, 4, 3, "off");
+    SmartPhone sp1 = new SmartPhone("sp1", 1434567891L, 320, 4, 3, "on");
     SmartPhone sp2 = new SmartPhone("sp2", 2434567891L, 320, 4, 3, "on");
     SmartPhone sp3 = new SmartPhone("sp3", 3434567891L, 320, 4, 3, "on");
     sp1.call(sp2);
@@ -11,6 +11,8 @@ class Main {
     sp1.end();
     sp3.call(sp1);
     sp2.call(sp3);
+    sp2.receiveEndSignal(sp1);
+    sp2.receive(sp1);
 
     
     Phone p1 = new SmartPhone("p1" , 1234567891L, 320, 4, 3, "on");
@@ -31,6 +33,10 @@ class Main {
     s1.call(p1);
     s1.installGame("miNeCraft"); // Smartphones can intall games when making a call.
     s1.playGame("minECRAFT"); // Smartphones can play games when making a call.
+    s1.end();
+    s1.receiveEndSignal(l6);
+    l8.end();
+    l8.receiveEndSignal(s1);
     
     System.out.println("\n" +"OLDLANDLINE TEST"); // Working
     OldLandline olll1 = new OldLandline("olll1", 5345654678L);

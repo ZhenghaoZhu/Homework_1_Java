@@ -34,12 +34,17 @@ public class Landline extends OldLandline{
       System.out.println("You can't call yourself.");
       return;
     }
+    receiveCalledFromClass = true;
     phone.receive(this);
     return;
   }
 
   @Override
   public void receive(Phone from){
+    if(!receiveCalledFromClass){
+      System.out.println("You should call instead.");
+      return;
+    }
     if(this.isBusy() && from.isBusy()){
       System.out.println(from.getOwner() + " is on the phone with " + this.getOwner() + ".");
       return;
