@@ -42,17 +42,21 @@ public class SmartPhone extends Landline implements Computer{
   }
 
   // Get call, check if P1 is turned on, then check if P2 is turned on. Check if P1 is available, check if P2 is available. If P1 is not available, print out statement. IF P2 is not available, message feature.
+  @Override
   public void call(Phone phone){
-    if(phone == this || this.lineOccupied == true || this.smartPhoneState == State.OFF){ // User can't call itself and can't call when already in a call
-      System.out.println("Call unable to happen.");
+    if(phone == this || this.isBusy() || this.smartPhoneState == State.OFF){ // User can't call itself and can't call when already in a call
+      System.out.println(getOwner() + "'s smartphone is not turned ON. Please turn ON to make calls.'");
       return;
     }
     // P1 is not busy and P1 is turned ON.
     phone.receive(this); // Checking if P2 is available, this is P1 and phone is P2
     return;
   }
+
+  @Override
   public void receive(Phone from){ // this is P2, from is P1
     if(this.isBusy() && from.isBusy()){ // Both values are now changed
+      System.out.println(from.getOwner() + " is on the phone with " + this.getOwner());
       return;
     }
     if(!(this.isBusy()) && (this.getState() == State.ON)){ // If P2 is available and ON, P2.receive(P1)
@@ -63,23 +67,39 @@ public class SmartPhone extends Landline implements Computer{
       from.receive(this);
       return;
     }
-    else if(this.isBusy() || this.getState() == State.OFF){ // P2 is unavailable
-      ;
+    else{ // P2 is either busy, OFF, or both.
+      Scanner in = new Scanner(System.in);
+      System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". Line is currently busy.");
+      System.out.println("Does " + from.getOwner() + " want to leave a message? [y/n]");
+      String msgInquiryAnswer = in.nextLine();
+      if(msgInquiryAnswer.equals("y")){
+        System.out.println("Please input your message:");
+        String newMessage = in.nextLine();
+        this.callerMessages.add(newMessage); // Adding message
+        this.msgsStatus.add(MSG_STATUS.UNREAD); // Updating new message status
+        return;
+      }
     }
+    return;
   }
   
 
   public void setState(String to){
     to = to.toUpperCase();
-    if(!(to.equals("ON")) && !(to.equals("OFF"))){
-      throw new IllegalArgumentException("Wrong smartphone state.");
+    System.out.println(to.equals("OFF") || to.equals("ON"));
+    if(to.contentEquals("ON") || to.contentEquals("OFF")){
+      State newState = State.valueOf(to); 
+      smartPhoneState = newState;
+      return;
     }
-    State newState = State.valueOf(to); 
-    smartPhoneState = newState;
-    return;
+    throw new IllegalArgumentException("Wrong smartphone state.");
   }
 
   public void installGame(String gameName){
+    if(smartPhoneState == State.OFF){
+      System.out.println(getOwner() + "'s smartphone is not turned ON. Please turn ON smartphone to install games.");
+      return;
+    }
     gameName = gameName.toUpperCase();
     if(games.size() == 5){
       System.out.println("Memory full, unable to install " + gameName);
@@ -103,6 +123,10 @@ public class SmartPhone extends Landline implements Computer{
   }
 
   public void playGame(String gameName){
+    if(smartPhoneState == State.OFF){
+      System.out.println(getOwner() + "'s smartphone is not turned ON. Please turn ON smartphone to play games.");
+      return;
+    }
     gameName = gameName.toUpperCase();
     if(getState() == Computer.State.ON){
       if(!(hasGame(gameName))){
@@ -118,6 +142,17 @@ public class SmartPhone extends Landline implements Computer{
     }
     else{
       System.out.println("The smartphone is not powered on, unable to play " + gameName + ".");
+    }
+  }
+
+  public void readMessages(MSG_STATUS status){
+    if(smartPhoneState == State.ON){
+      super.readMessages(status);
+      return;
+    }
+    else{
+      System.out.println("Please turn on smartphone to access messages.");
+      return;
     }
   }
 }

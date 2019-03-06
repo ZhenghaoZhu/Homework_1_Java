@@ -24,14 +24,33 @@ public class Landline extends OldLandline{
     msgsStatus = new ArrayList<MSG_STATUS>(); // Same logic as previous line.
   }
 
+  @Override
+  public void call(Phone phone){
+    if(phone == this || this.isBusy()){
+      System.out.println(getOwner() + "'s call unable to happen.");
+      return;
+    }
+    phone.receive(this);
+    return;
+  }
+
+  @Override
   public void receive(Phone from){
-    if(!(this.lineOccupied)){ // Phone calling the method is not occupied.
-      this.lineOccupied = true; // Set it to occupied
-      setCallerName(from.getOwner()); // Set caller name
+    if(this.isBusy() && from.isBusy()){
+      System.out.println(from.getOwner() + " is on the phone with " + this.getOwner());
+      return;
+    }
+    if(!(this.isBusy())){ // Phone calling the method is not occupied.
+      this.callerPhone = from;
+      this.lineOccupied = true; // P2 is now occupied
+      this.callerPhoneNumber = from.number();
+      this.setCallerName(from.getOwner()); // Saving P1's name
+      from.receive(this);
       return;
     }
     else{
       Scanner in = new Scanner(System.in);
+      System.out.println(from.getOwner() + " is unable to call " + this.getOwner());
       System.out.println("Does " + from.getOwner() + " want to leave a message? [y/n]");
       String msgInquiryAnswer = in.nextLine();
       if(msgInquiryAnswer.equals("y")){
@@ -41,20 +60,20 @@ public class Landline extends OldLandline{
         this.msgsStatus.add(MSG_STATUS.UNREAD); // Updating new message status
         return;
       }
-      else{
-        return;
-      }
     }
+    return;
   }
 
   public void readMessages(MSG_STATUS status){
     // Users can call and read messages at the same time.
     System.out.println(getOwner() + "'s requested messages: " + "\n");
+    int count = 0;
     if(status == MSG_STATUS.UNREAD){
       for(int i = 0; i < msgsStatus.size(); i++){ // Prints out UNREAD messages.
         if(msgsStatus.get(i) == MSG_STATUS.UNREAD){
           System.out.println(callerMessages.get(i));
           msgsStatus.set(i, MSG_STATUS.READ);
+          count++;
         }
       }
     }
@@ -62,7 +81,11 @@ public class Landline extends OldLandline{
       for(int i = 0; i < callerMessages.size(); i++){ // Prints out ALL messages
         System.out.println(callerMessages.get(i));
         msgsStatus.set(i, MSG_STATUS.READ);
+        count++;
       }
+    }
+    if(count == 0){
+      System.out.println("[No messages.]");
     }
     System.out.println("\n");
     return;

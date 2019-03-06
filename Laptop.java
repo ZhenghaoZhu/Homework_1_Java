@@ -59,11 +59,12 @@ public class Laptop implements Computer{
 
   public void setState(String to){
     to = to.toUpperCase();
-    if(!(to.equals("ON")) && !(to.equals("OFF"))){
-      throw new IllegalArgumentException("Wrong laptop state.");
+    if((to.equals("ON")) || (to.equals("OFF"))){
+      State newState = State.valueOf(to); 
+      laptopState = newState;
+      return;
     }
-    State newState = State.valueOf(to); 
-    laptopState = newState;
+    throw new IllegalArgumentException("Wrong laptop state.");
   }
 
   public void installGame(String gameName){

@@ -40,41 +40,47 @@ public class OldLandline implements Phone{
     }
     
     public void call(Phone phone){
-      if(phone == this || this.lineOccupied == true){ // User can't call itself and can't call when already in a call.
+      if(phone == this || this.isBusy()){ // User can't call itself and can't call when already in a call.
         System.out.println("Call unable to happen.");
         return;
       }
-      if(!phone.isBusy() && !(this.isBusy())){
-        lineOccupied = true;
-        callerPhone = phone;
-        callerName = callerPhone.getOwner();
-        callerPhone.receive(this);
-        String returnedMessage = this.getOwner() + " is on the phone with " + phone.getOwner();
-        System.out.println(returnedMessage);
-        
+      if(phone.isBusy()){
+        System.out.println(this.getOwner() + " is unable to call " + phone.getOwner());
+        return;
       }
-      else{
-        System.out.println(this.getOwner() + " is unable to call " + phone.getOwner() + ". Line is currently busy.");
-        phone.receive(this);
-      }
+      phone.receive(this);
       return;
-      
     }
 
     public void end(){ 
+      if(callerPhone == null){
+        System.out.println(this.getOwner() + " is not in a call.");
+        return;
+      }
       String returnedMessage  = getOwner() + " has ended the call to " + getCallerName();
       callerPhone.receiveEndSignal(this);
+      callerPhoneNumber = null;
       setCallerName("");
+      callerPhone = null;
       this.lineOccupied = false;
       System.out.println(returnedMessage);
       return;
     }
 
     public void receive(Phone from){
-      this.callerPhone = from;
-      this.lineOccupied = true;
-      this.callerPhoneNumber = from.number();
-      setCallerName(from.getOwner());
+      if(this.isBusy() && from.isBusy()){ // Both values are now changed
+        System.out.println(from.getOwner() + " is on the phone with " + this.getOwner());
+        return;
+      }
+      if(!(this.isBusy())){ // If P2 is available and ON, P2.receive(P1)
+        this.callerPhone = from;
+        this.lineOccupied = true; // P2 is now occupied
+        this.callerPhoneNumber = from.number();
+        this.setCallerName(from.getOwner()); // Saving P1's name
+        from.receive(this);
+        return;
+      }
+      return;
     }
 
     public boolean isBusy(){

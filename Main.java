@@ -3,38 +3,38 @@ class Main {
     
 
     
+    SmartPhone sp1 = new SmartPhone("sp1", 1434567891L, 320, 4, 3, "off");
+    SmartPhone sp2 = new SmartPhone("sp2", 2434567891L, 320, 4, 3, "on");
+    SmartPhone sp3 = new SmartPhone("sp3", 3434567891L, 320, 4, 3, "on");
+    sp1.call(sp2);
+    sp3.call(sp1);
+    sp3.call(sp2);
+    sp1.end();
+    sp3.call(sp1);
+    sp2.call(sp3);
+
     
-    Phone sp1 = new SmartPhone("sp1" , 1434567891L, 320, 4, 3, "oN");
-    SmartPhone newSp2 = (SmartPhone) sp1; // typecasting
-    newSp2.installGame("MINEcraft");
-    newSp2.playGame("minecraft");
-    System.out.println(newSp2.number());
-    SmartPhone sp2 = new SmartPhone("sp2", 2434567891L, 320, 4, 3, "off");
-    sp2.call(sp1);
-
-
-    /*
-    Phone sp1 = new SmartPhone("sp1" , 1234567891L, 320, 4, 3, "on");
+    Phone p1 = new SmartPhone("p1" , 1234567891L, 320, 4, 3, "on");
     SmartPhone newSp1 = (SmartPhone) sp1; // typecasting
     newSp1.installGame("MINEcraft");
     newSp1.playGame("minecraft");
     System.out.println(newSp1.number());
     
-    OldLandline p1 = new OldLandline("p1", 5345654678L);
-    Landline p6 = new Landline("p6", 1234567891L);
-    Landline p7 = new Landline("p7", 2234567891L);
-    Landline p8 = new Landline("p8", 3234567891L);
+    OldLandline oll1 = new OldLandline("oll1", 5345654678L);
+    Landline l6 = new Landline("l6", 1234567891L);
+    Landline l7 = new Landline("l7", 2234567891L);
+    Landline l8 = new Landline("l8", 3234567891L);
     SmartPhone s1 = new SmartPhone("s1" , 1234567891L, 320, 4, 3, "on");
-    p6.call(p7);
-    p8.call(p1);
+    l6.call(l7);
+    l8.call(p1);
     p1.end();
-    p1.call(p6);
+    p1.call(l6);
     s1.call(p1);
     s1.installGame("miNeCraft"); // Smartphones can intall games when making a call.
     s1.playGame("minECRAFT"); // Smartphones can play games when making a call.
-    */
+    
     System.out.println("\n" +"OLDLANDLINE TEST"); // Working
-    OldLandline p1 = new OldLandline("p1", 5345654678L);
+    OldLandline olll1 = new OldLandline("olll1", 5345654678L);
     OldLandline p2 = new OldLandline("p2", 1345654678L);
     OldLandline p3 = new OldLandline("p3", 2345654678L);
     OldLandline p4 = new OldLandline("p4", 7345654678L);
@@ -87,16 +87,20 @@ class Main {
     l1.installGame("Steam");
     l1.installGame("Counter-Strike");
     
-    /*
+    
     System.out.println("\n" + "SMARTPHONE AND LANDLINE TEST");
-    SmartPhone s1 = new SmartPhone("s1" , 1234567891L, 320, 4, 3, "on");
-    Landline p6 = new Landline("p6", 1234567891L);
-    Landline p7 = new Landline("p7", 2234567891L);
-    p6.call(p7);
-    s1.call(p6);
-    p6.end();
-    s1.call(p7);
-    */
+    SmartPhone spp1 = new SmartPhone("spp1" , 1234567891L, 320, 4, 3, "on");
+    Landline lll6 = new Landline("lll6", 1234567891L);
+    Landline lll7 = new Landline("lll7", 2234567891L);
+    lll6.call(spp1);
+    lll6.call(lll7);
+    spp1.end();
+    lll7.call(spp1);
+    spp1.end();
+    spp1.end();
+
+    
+    
 
   }
 }
