@@ -24,10 +24,14 @@ public class Landline extends OldLandline{
     msgsStatus = new ArrayList<MSG_STATUS>(); // Same logic as previous line.
   }
 
-  @Override
+  @Override // Overwrote because Landline has the message feature, which is implementedin receive().
   public void call(Phone phone){
-    if(phone == this || this.isBusy()){
-      System.out.println(getOwner() + "'s call unable to happen.");
+    if(this.isBusy()){
+      System.out.println("Phone is already in a call. PLease end your call to continue.");
+      return;
+    }
+    if(phone == this){
+      System.out.println("You can't call yourself.");
       return;
     }
     phone.receive(this);
@@ -37,7 +41,7 @@ public class Landline extends OldLandline{
   @Override
   public void receive(Phone from){
     if(this.isBusy() && from.isBusy()){
-      System.out.println(from.getOwner() + " is on the phone with " + this.getOwner());
+      System.out.println(from.getOwner() + " is on the phone with " + this.getOwner() + ".");
       return;
     }
     if(!(this.isBusy())){ // Phone calling the method is not occupied.
@@ -45,17 +49,18 @@ public class Landline extends OldLandline{
       this.lineOccupied = true; // P2 is now occupied
       this.callerPhoneNumber = from.number();
       this.setCallerName(from.getOwner()); // Saving P1's name
-      from.receive(this);
+      from.receive(this); // Recursion? At this time of year? At this time of day? In this part of the country? Localized entirely within your CSE 216 Homework?
       return;
     }
     else{
       Scanner in = new Scanner(System.in);
-      System.out.println(from.getOwner() + " is unable to call " + this.getOwner());
+      System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ".");
       System.out.println("Does " + from.getOwner() + " want to leave a message? [y/n]");
       String msgInquiryAnswer = in.nextLine();
-      if(msgInquiryAnswer.equals("y")){
+      if(msgInquiryAnswer.toLowerCase().equals("y")){
         System.out.println("Please input your message:");
         String newMessage = in.nextLine();
+        newMessage = from.getOwner() + ": " + newMessage;
         this.callerMessages.add(newMessage); // Adding message
         this.msgsStatus.add(MSG_STATUS.UNREAD); // Updating new message status
         return;
@@ -63,29 +68,40 @@ public class Landline extends OldLandline{
     }
     return;
   }
+  public void readMessages(){ // Prints out all messages
+    System.out.println(getOwner() + "'s requested messages:" + "\n");
+    int msgCount = 0;
+    for(int i = 0; i < callerMessages.size(); i++){
+      msgCount++;
+      System.out.println("Message #" + msgCount + " from "  + callerMessages.get(i));
+    }
+    System.out.println("\n");
+    return;
+  }
 
   public void readMessages(MSG_STATUS status){
     // Users can call and read messages at the same time.
     System.out.println(getOwner() + "'s requested messages: " + "\n");
-    int count = 0;
-    if(status == MSG_STATUS.UNREAD){
+    int msgCount = 0;
+    if(status == MSG_STATUS.UNREAD){ // enum parameter is UNREAD.
       for(int i = 0; i < msgsStatus.size(); i++){ // Prints out UNREAD messages.
         if(msgsStatus.get(i) == MSG_STATUS.UNREAD){
-          System.out.println(callerMessages.get(i));
+          msgCount++;
+          System.out.println("Message #" + msgCount + " from "  + callerMessages.get(i));
           msgsStatus.set(i, MSG_STATUS.READ);
-          count++;
         }
       }
     }
-    else{
+    else{ // enum parameter is READ.
       for(int i = 0; i < callerMessages.size(); i++){ // Prints out ALL messages
-        System.out.println(callerMessages.get(i));
-        msgsStatus.set(i, MSG_STATUS.READ);
-        count++;
+        if(msgsStatus.get(i) == MSG_STATUS.READ){
+          msgCount++;
+          System.out.println("Message #" + msgCount + " from "  + callerMessages.get(i));
+        }
       }
     }
-    if(count == 0){
-      System.out.println("[No messages.]");
+    if(msgCount == 0){
+    System.out.println("[No messages.]"); // If no messages were printed, print this.
     }
     System.out.println("\n");
     return;
