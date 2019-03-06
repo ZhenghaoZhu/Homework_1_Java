@@ -45,7 +45,7 @@ public class SmartPhone extends Landline implements Computer{
   @Override
   public void call(Phone phone){
     if(phone == this || this.isBusy() || this.smartPhoneState == State.OFF){ // User can't call itself and can't call when already in a call
-      System.out.println(getOwner() + "'s smartphone is not turned ON. Please turn ON to make calls.'");
+      System.out.println(getOwner() + "'s smartphone is not turned ON. Please turn ON to make calls.");
       return;
     }
     // P1 is not busy and P1 is turned ON.
@@ -64,12 +64,17 @@ public class SmartPhone extends Landline implements Computer{
       this.lineOccupied = true; // P2 is now occupied
       this.callerPhoneNumber = from.number();
       this.setCallerName(from.getOwner()); // Saving P1's name
-      from.receive(this);
+      from.receive(this); // Recursion? At this place? At this time? Impossible...
       return;
     }
     else{ // P2 is either busy, OFF, or both.
       Scanner in = new Scanner(System.in);
-      System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". Line is currently busy.");
+      if(this.isBusy()){
+        System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". Line is currently busy.");
+      }
+      else if(this.getState() == State.OFF){
+        System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". " + this.getOwner() + "'s phone is turned OFF.");
+      }
       System.out.println("Does " + from.getOwner() + " want to leave a message? [y/n]");
       String msgInquiryAnswer = in.nextLine();
       if(msgInquiryAnswer.equals("y")){
@@ -86,7 +91,6 @@ public class SmartPhone extends Landline implements Computer{
 
   public void setState(String to){
     to = to.toUpperCase();
-    System.out.println(to.equals("OFF") || to.equals("ON"));
     if(to.contentEquals("ON") || to.contentEquals("OFF")){
       State newState = State.valueOf(to); 
       smartPhoneState = newState;
