@@ -1,6 +1,7 @@
 class Main {
   public static void main(String[] args) {
     
+
     
     SmartPhone sp1 = new SmartPhone("sp1", 1434567891L, 320, 4, 3, "on");
     SmartPhone sp2 = new SmartPhone("sp2", 2434567891L, 320, 4, 3, "on");
@@ -68,12 +69,9 @@ class Main {
     p6.readMessages(Landline.MSG_STATUS.UNREAD); // Print out all of p6's unread messages
     p6.end();
     p8.call(p6); // p8 unable to call p6, leaves message, p6 has 1 unread message
-    p6.readMessages(Landline.MSG_STATUS.READ);
+    p6.readMessages(Landline.MSG_STATUS.UNREAD);
     p6.end();
-    p6.readMessages();
-    p6.call(p8);
-    p7.call(p6);
-    p6.readMessages();
+    p6.readMessages(Landline.MSG_STATUS.READ);
     
     System.out.println("\n" + "LAPTOP TEST"); // Working
     Laptop l1 = new Laptop(100, 6, 2, "L1", "DC", "ON");
@@ -106,7 +104,6 @@ class Main {
     lll7.call(spp1);
     spp1.end();
     spp1.end();
-    
 
     
     

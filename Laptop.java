@@ -81,7 +81,7 @@ public class Laptop implements Computer{
       games.add(gameName); // Adding game, upper casing to take care of scenarios such as 'minecraft' vs. 'Minecraft'
     }
     else{
-      System.out.println("The laptop is not powered ON, unable to install " + gameName + ".");
+      System.out.println("The laptop is not powered on, unable to install " + gameName + ".");
     }
     return;
   }
@@ -105,7 +105,7 @@ public class Laptop implements Computer{
       }
     }
     else{
-      System.out.println("The laptop is not powered ON, unable to play " + gameName + ".");
+      System.out.println("The laptop is not powered on, unable to play " + gameName + ".");
     }
   }
 }

@@ -42,15 +42,12 @@ public class OldLandline implements Phone{
     }
     
     public void call(Phone phone){
-      if(this.isBusy()){ // User can't call itself and can't call when already in a call.
-        System.out.println("Phone is already in a call. Please end your call to continue.");
+      if(phone == this || this.isBusy()){ // User can't call itself and can't call when already in a call.
+        System.out.println("Call unable to happen.");
         return;
       }
-      if(phone == this){
-        System.out.println("You can't call yourself.");
-      }
       if(phone.isBusy()){
-        System.out.println(this.getOwner() + " is unable to call " + phone.getOwner() + ". Line is currently busy.");
+        System.out.println(this.getOwner() + " is unable to call " + phone.getOwner());
         return;
       }
       receiveCalledFromClass = true;
@@ -59,18 +56,17 @@ public class OldLandline implements Phone{
     }
 
     public void end(){ 
-      if(callerPhone == null){ // User is trying to end a call they are not in.
+      if(callerPhone == null){
         System.out.println(this.getOwner() + " is not in a call.");
         return;
       }
-      String returnedMessage  = getOwner() + " has ended the call to " + getCallerName() + "."; // Ending the call.
-      receiveEndSignalCalledFromClass = true;
-      callerPhone.receiveEndSignal(this); // Other user also ending the call.
-      callerPhoneNumber = null; // Reseting variables to null
+      String returnedMessage  = getOwner() + " has ended the call to " + getCallerName();
+      callerPhone.receiveEndSignal(this);
+      callerPhoneNumber = null;
       setCallerName("");
       callerPhone = null;
       this.lineOccupied = false;
-      System.out.println(returnedMessage); // Finalizing end call.
+      System.out.println(returnedMessage);
       return;
     }
 
@@ -80,15 +76,15 @@ public class OldLandline implements Phone{
         return;
       }
       if(this.isBusy() && from.isBusy()){ // Both values are now changed
-        System.out.println(from.getOwner() + " is on the phone with " + this.getOwner() + ".");
+        System.out.println(from.getOwner() + " is on the phone with " + this.getOwner());
         return;
       }
       if(!(this.isBusy())){ // If P2 is available and ON, P2.receive(P1)
+        this.callerPhone = from;
         this.lineOccupied = true; // P2 is now occupied
-        this.callerPhone = from; // Saving P1
-        this.callerPhoneNumber = from.number(); // Saving P1's phone number.
+        this.callerPhoneNumber = from.number();
         this.setCallerName(from.getOwner()); // Saving P1's name
-        from.receive(this); // Recursion
+        from.receive(this);
         return;
       }
       return;
@@ -99,15 +95,8 @@ public class OldLandline implements Phone{
     }
 
     public void receiveEndSignal(Phone from){
-      if(!receiveEndSignalCalledFromClass){
-        System.out.println("You should end the call instead.");
-        return;
-      }
-      this.callerPhoneNumber = null; // Reseting variables to null
-      callerPhone = null;
-      this.lineOccupied = false;
-      setCallerName(""); // Other caller setting variable to null
-      return;
+      lineOccupied = false;
+      setCallerName("");
     }
 
     public PhoneNumber number(){
