@@ -2,7 +2,7 @@ class Main {
   public static void main(String[] args) {
     
     
-    SmartPhone sp1 = new SmartPhone("sp1", 1434567891L, 320, 4, 3, "off");
+    SmartPhone sp1 = new SmartPhone("sp1", 1434567891L, 320, 4, 3, "on");
     SmartPhone sp2 = new SmartPhone("sp2", 2434567891L, 320, 4, 3, "on");
     SmartPhone sp3 = new SmartPhone("sp3", 3434567891L, 320, 4, 3, "on");
     sp1.call(sp2);

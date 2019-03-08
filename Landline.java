@@ -75,12 +75,18 @@ public class Landline extends OldLandline{
       msgCount++;
       System.out.println("Message #" + msgCount + " from "  + callerMessages.get(i));
     }
+    if(msgCount == 0){
+      System.out.println("[No messages.]");
+    }
     System.out.println("\n");
     return;
   }
 
   public void readMessages(MSG_STATUS status){
-    // Users can call and read messages at the same time.
+    if(isBusy()){
+      System.out.println("You can't read messages when on a call.");
+      return;
+    }
     System.out.println(getOwner() + "'s requested messages: " + "\n");
     int msgCount = 0;
     if(status == MSG_STATUS.UNREAD){ // enum parameter is UNREAD.
@@ -101,8 +107,9 @@ public class Landline extends OldLandline{
       }
     }
     if(msgCount == 0){
-    System.out.println("[No messages.]"); // If no messages were printed, print this.
+      System.out.println("[No messages.]"); // If no messages were printed, print this.
     }
+    msgCount = 0;
     System.out.println("\n");
     return;
   }
