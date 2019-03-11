@@ -23,11 +23,12 @@ public class Landline extends OldLandline{
     callerMessages = new ArrayList<String>(); // No size as we don't know the number of messages that will be stored.
     msgsStatus = new ArrayList<MSG_STATUS>(); // Same logic as previous line.
   }
+  
 
   @Override // Overwrote because Landline has the message feature, which is implementedin receive().
   public void call(Phone phone){
     if(this.isBusy()){
-      System.out.println("Phone is already in a call. PLease end your call to continue.");
+      System.out.println("Phone is already in a call. Please end your call to continue.");
       return;
     }
     if(phone == this){
@@ -69,6 +70,10 @@ public class Landline extends OldLandline{
     return;
   }
   public void readMessages(){ // Prints out all messages
+    if(isBusy()){
+      System.out.println("You can't listen to messages when on a call.");
+      return;
+    }
     System.out.println(getOwner() + "'s requested messages:" + "\n");
     int msgCount = 0;
     for(int i = 0; i < callerMessages.size(); i++){
@@ -84,7 +89,7 @@ public class Landline extends OldLandline{
 
   public void readMessages(MSG_STATUS status){
     if(isBusy()){
-      System.out.println("You can't read messages when on a call.");
+      System.out.println("You can't listen to messages when on a call.");
       return;
     }
     System.out.println(getOwner() + "'s requested messages: " + "\n");

@@ -7,7 +7,7 @@
 
 public class PhoneNumber{
   
-  private final long phoneNumber;
+  final long phoneNumber;
 
   public PhoneNumber(long phoneNumber){
     String phoneNumberString = Long.toString(phoneNumber);
@@ -17,6 +17,7 @@ public class PhoneNumber{
     this.phoneNumber = phoneNumber;
   }
 
+  @Override
   public String toString(){ // Overrides toString method to ouput phoneNumber instead the object's hash code
     return Long.toString(phoneNumber);
   }

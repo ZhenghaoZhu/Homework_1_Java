@@ -21,13 +21,13 @@ public class Laptop implements Computer{
 
 
 
-  public Laptop(int screenSize, int RAM, int processorSpeeed, String laptopOwner, String brand, String laptopState){ // Constructor
-    this.screenSize = screenSize;
-    this.RAM = RAM;
-    this.processorSpeeed = processorSpeeed;
+  public Laptop(String laptopOwner, String brand, String laptopState, int screenSize, int RAM, int processorSpeeed){ // Constructor
     this.laptopOwner = laptopOwner;
     this.brand = brand;
     setState(laptopState);
+    this.screenSize = screenSize;
+    this.RAM = RAM;
+    this.processorSpeeed = processorSpeeed;
     this.hostname = this.laptopOwner + "'s " + this.brand + " laptop";
     this.gamesCapacity = 20; // Game capacity, no unlimited memory
     games = new HashSet<String>(gamesCapacity); // Laptops don't have unlimited storage
@@ -49,6 +49,10 @@ public class Laptop implements Computer{
     return laptopOwner;
   }
 
+  public String getBrand(){
+    return brand;
+  }
+
   public String getHostName(){
     return hostname;
   }
@@ -58,17 +62,16 @@ public class Laptop implements Computer{
   }
 
   public void setState(String to){
-    to = to.toUpperCase();
-    if((to.equals("ON")) || (to.equals("OFF"))){
-      State newState = State.valueOf(to); 
+    if(to.equals("on") || to.equals("off") || to.equals("ON") || to.equals("OFF")){ // Checking if its the right state
+      State newState = State.valueOf(to.toUpperCase()); // Upper casing to match written state
       laptopState = newState;
+      System.out.println(laptopOwner + "'s laptop is now turned " + getState() + ".");
       return;
     }
     throw new IllegalArgumentException("Wrong laptop state.");
   }
 
   public void installGame(String gameName){
-    gameName = gameName.toUpperCase();
     if(games.size() == gamesCapacity){
       System.out.println("Memory full, unable to install " + gameName);
       return;
@@ -87,12 +90,11 @@ public class Laptop implements Computer{
   }
 
   public boolean hasGame(String gameName){
-    return (games.contains(gameName.toUpperCase()));
+    return (games.contains(gameName));
   }
 
   public void playGame(String gameName){
-    gameName = gameName.toUpperCase();
-    if(getState() == Computer.State.ON){
+    if(getState() == State.ON){
       if(!(hasGame(gameName))){
         String returnedMessage = "Cannot play " + gameName + " on " + getLaptopOwner() + " 's laptop. Install it first.";
         System.out.println(returnedMessage);

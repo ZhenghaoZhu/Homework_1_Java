@@ -38,6 +38,12 @@ public class OldLandline implements Phone{
     public void setCallerName(String callerName){
       this.callerName = callerName;
     }
+
+    @Override
+    public String toString(){
+      System.out.println("Phone number:" + number());
+      return "Owner: " + getOwner();
+    }
     
     public void call(Phone phone){
       if(this.isBusy()){ // User can't call itself and can't call when already in a call.
@@ -56,7 +62,7 @@ public class OldLandline implements Phone{
     }
 
     public void end(){ 
-      if(callerPhone == null){ // User is trying to end a call they are not in.
+      if(callerPhone == null){ // User is trying to end a call they are not in a call.
         System.out.println(this.getOwner() + " is not in a call.");
         return;
       }

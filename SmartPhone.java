@@ -7,6 +7,7 @@
 
 import java.util.HashSet;
 import java.util.Scanner;
+// package com.stackitfy.stacktrace;
 
 public class SmartPhone extends Landline implements Computer{
 
@@ -63,44 +64,46 @@ public class SmartPhone extends Landline implements Computer{
 
   @Override
   public void receive(Phone from){ // this is P2, from is P1
-    if(this.isBusy() && from.isBusy()){ // Both values are now changed
-      System.out.println(from.getOwner() + " is on the phone with " + this.getOwner() + ".");
-      return;
-    }
-    if(!(this.isBusy()) && (this.getState() == State.ON)){ // If P2 is available and ON, P2.receive(P1)
-      this.callerPhone = from;
-      this.lineOccupied = true; // P2 is now occupied
-      this.callerPhoneNumber = from.number();
-      this.setCallerName(from.getOwner()); // Saving P1's name
-      from.receive(this); // Recursion? At this time of year? At this time of day? In this part of the country? Localized entirely within your CSE 216 Homework?
-      return;
-    }
-    else{ // P2 is either busy, OFF, or both.
-      Scanner in = new Scanner(System.in);
-      if(this.isBusy()){
-        System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". Line is currently busy.");
-      }
-      else if(this.getState() == State.OFF){
-        System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". " + this.getOwner() + "'s phone is turned OFF.");
-      }
-      System.out.println("Does " + from.getOwner() + " want to leave a message? [y/n]");
-      String msgInquiryAnswer = in.nextLine();
-      if(msgInquiryAnswer.toLowerCase().equals("y")){
-        System.out.println("Please input your message:");
-        String newMessage = in.nextLine();
-        this.callerMessages.add(newMessage); // Adding message
-        this.msgsStatus.add(MSG_STATUS.UNREAD); // Updating new message status
+    // StackTraceElement[] stack = Thread.currentThread().getStackTrace()
+    // if(){
+      if(this.isBusy() && from.isBusy()){ // Both values are now changed
+        System.out.println(from.getOwner() + " is on the phone with " + this.getOwner() + ".");
         return;
       }
-    }
-    return;
+      if(!(this.isBusy()) && (this.getState() == State.ON)){ // If P2 is available and ON, P2.receive(P1)
+        this.callerPhone = from;
+        this.lineOccupied = true; // P2 is now occupied
+        this.callerPhoneNumber = from.number();
+        this.setCallerName(from.getOwner()); // Saving P1's name
+        from.receive(this); // Recursion? At this time of year? At this time of day? In this part of the country? Localized entirely within your CSE 216 Homework?
+        return;
+      }
+      else{ // P2 is either busy, OFF, or both.
+        Scanner in = new Scanner(System.in);
+        if(this.isBusy()){
+          System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". Line is currently busy.");
+        }
+        else if(this.getState() == State.OFF){
+          System.out.println(from.getOwner() + " is unable to call " + this.getOwner() + ". " + this.getOwner() + "'s phone is turned OFF.");
+        }
+        System.out.println("Does " + from.getOwner() + " want to leave a message? [y/n]");
+        String msgInquiryAnswer = in.nextLine();
+        if(msgInquiryAnswer.toLowerCase().equals("y")){
+          System.out.println("Please input your message:");
+          String newMessage = in.nextLine();
+          this.callerMessages.add(newMessage); // Adding message
+          this.msgsStatus.add(MSG_STATUS.UNREAD); // Updating new message status
+          return;
+        }
+      }
+      return;
+    //}
   }
   
 
   public void setState(String to){
-    to = to.toUpperCase();
-    if(to.contentEquals("ON") || to.contentEquals("OFF")){
-      State newState = State.valueOf(to); 
+    if(to.equals("on") || to.equals("off") || to.equals("ON") || to.equals("OFF")){ // Checking if its the right state
+      State newState = State.valueOf(to.toUpperCase()); 
       smartPhoneState = newState;
       System.out.println(getOwner() + "'s smartphone is now turned " + getState() + ".");
       return;
@@ -113,7 +116,7 @@ public class SmartPhone extends Landline implements Computer{
       System.out.println(getOwner() + "'s smartphone is not turned ON. Please turn smartphone ON to install games.");
       return;
     }
-    gameName = gameName.toUpperCase();
+    // gameName = gameName.toUpperCase(); If installing a game is not case-sensitive, then use this line.
     if(games.size() == 5){
       System.out.println("Memory full, unable to install " + gameName);
       return;
@@ -132,7 +135,7 @@ public class SmartPhone extends Landline implements Computer{
   }
 
   public boolean hasGame(String gameName){
-    return (games.contains(gameName.toUpperCase())); // Hash set contains() method is O(1)
+    return (games.contains(gameName)); // Hash set contains() method is O(1)
   }
 
   public void playGame(String gameName){
@@ -140,7 +143,7 @@ public class SmartPhone extends Landline implements Computer{
       System.out.println(getOwner() + "'s smartphone is not turned ON. Please turn smartphone ON to play games.");
       return;
     }
-    gameName = gameName.toUpperCase();
+    // gameName = gameName.toUpperCase(); If playing a game is not case-sensitive, then use this line.
     if(getState() == State.ON){
       if(!(hasGame(gameName))){
         String returnedMessage = "Cannot play " + gameName + " on " + getOwner() + " 's smartphone. Install it first.";
